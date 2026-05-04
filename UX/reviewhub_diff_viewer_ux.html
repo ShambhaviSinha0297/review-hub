@@ -1,0 +1,150 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  .app { font-family: var(--font-mono, monospace); background: var(--color-background-tertiary); border-radius: var(--border-radius-lg); border: 0.5px solid var(--color-border-tertiary); overflow: hidden; }
+  .topbar { background: var(--color-background-primary); border-bottom: 0.5px solid var(--color-border-tertiary); display: flex; align-items: center; gap: 10px; padding: 0 14px; height: 44px; font-family: var(--font-sans); }
+  .back { font-size: 12px; color: var(--color-text-secondary); cursor: pointer; }
+  .pr-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+  .sep { flex: 1; }
+  .presence { display: flex; gap: 6px; align-items: center; }
+  .cursor-badge { font-size: 10px; padding: 3px 8px; border-radius: 8px; font-family: var(--font-sans); }
+  .action-btn { font-size: 11px; padding: 5px 12px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); cursor: pointer; font-family: var(--font-sans); background: transparent; color: var(--color-text-primary); }
+  .approve-btn { background: #EAF3DE; color: #3B6D11; border-color: #97C459; }
+  .subbar { background: var(--color-background-secondary); border-bottom: 0.5px solid var(--color-border-tertiary); display: flex; align-items: center; gap: 0; font-family: var(--font-sans); font-size: 11px; }
+  .file-tab { padding: 8px 14px; color: var(--color-text-secondary); cursor: pointer; border-bottom: 2px solid transparent; }
+  .file-tab.active { color: var(--color-text-primary); font-weight: 500; border-bottom-color: #378ADD; }
+  .body { display: flex; height: 500px; }
+  .file-tree { width: 200px; background: var(--color-background-primary); border-right: 0.5px solid var(--color-border-tertiary); padding: 10px 0; overflow-y: auto; flex-shrink: 0; }
+  .ft-item { padding: 5px 14px; font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-family: var(--font-sans); color: var(--color-text-secondary); }
+  .ft-item.active { background: var(--color-background-secondary); color: var(--color-text-primary); }
+  .ft-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .diff { flex: 1; overflow-y: auto; background: var(--color-background-primary); }
+  .diff-file-header { padding: 8px 14px; background: var(--color-background-secondary); border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 11px; color: var(--color-text-secondary); font-family: var(--font-sans); display: flex; gap: 8px; align-items: center; }
+  .hunk-header { padding: 4px 14px; background: var(--color-background-info); font-size: 11px; color: var(--color-text-info); }
+  .line { display: flex; align-items: stretch; min-height: 20px; font-size: 11px; line-height: 20px; }
+  .line:hover .line-add-btn { opacity: 1; }
+  .ln { width: 40px; text-align: right; padding: 0 8px; color: var(--color-text-tertiary); font-size: 10px; user-select: none; flex-shrink: 0; border-right: 0.5px solid var(--color-border-tertiary); }
+  .line-add-btn { width: 18px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--color-text-tertiary); cursor: pointer; opacity: 0; font-family: var(--font-sans); }
+  .code { flex: 1; padding: 0 8px; white-space: pre; overflow: hidden; text-overflow: ellipsis; }
+  .line.add { background: #EAF3DE; }
+  .line.add .ln { background: #C0DD97; }
+  .line.add .code { color: #27500A; }
+  .line.del { background: #FCEBEB; }
+  .line.del .ln { background: #F7C1C1; }
+  .line.del .code { color: #791F1F; text-decoration: line-through; opacity: 0.7; }
+  .line.ctx .code { color: var(--color-text-secondary); }
+  .comment-thread { background: var(--color-background-secondary); border-top: 0.5px solid var(--color-border-tertiary); border-bottom: 0.5px solid var(--color-border-tertiary); padding: 10px 14px; }
+  .comment { display: flex; gap: 8px; margin-bottom: 8px; font-family: var(--font-sans); }
+  .comment:last-child { margin-bottom: 0; }
+  .av { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 500; flex-shrink: 0; }
+  .comment-body { flex: 1; }
+  .comment-author { font-size: 11px; font-weight: 500; color: var(--color-text-primary); }
+  .comment-time { font-size: 10px; color: var(--color-text-tertiary); margin-left: 5px; }
+  .comment-text { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; line-height: 1.5; }
+  .comment-actions { display: flex; gap: 8px; margin-top: 4px; }
+  .react-btn { font-size: 10px; padding: 1px 6px; border-radius: 8px; background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); cursor: pointer; color: var(--color-text-secondary); }
+  .react-btn.active { background: #FAEEDA; color: #633806; border-color: #FAC775; }
+  .cursor-overlay { position: relative; }
+  .cursor-indicator { font-size: 9px; font-family: var(--font-sans); padding: 2px 5px; border-radius: 3px; display: inline-flex; align-items: center; gap: 3px; margin: 1px 0; }
+  .typing-indicator { display: inline-flex; gap: 2px; align-items: center; }
+  .typing-dot { width: 4px; height: 4px; border-radius: 50%; background: #888; animation: pulse 1.2s ease-in-out infinite; }
+  .typing-dot:nth-child(2) { animation-delay: .2s; }
+  .typing-dot:nth-child(3) { animation-delay: .4s; }
+  @keyframes pulse { 0%,100%{opacity:.3}50%{opacity:1} }
+</style>
+<div class="app">
+  <div class="topbar">
+    <span class="back">← PRs</span>
+    <span class="pr-title">#1042 — feat: migrate auth layer to JWT</span>
+    <div class="sep"></div>
+    <div class="presence">
+      <span class="cursor-badge" style="background:#EEEDFE;color:#3C3489;">SR viewing</span>
+      <span class="cursor-badge" style="background:#E1F5EE;color:#085041;">PL reviewing</span>
+    </div>
+    <button class="action-btn">Request changes</button>
+    <button class="action-btn approve-btn">Approve</button>
+  </div>
+  <div class="subbar">
+    <div class="file-tab active">Diff</div>
+    <div class="file-tab">Conversation (7)</div>
+    <div class="file-tab">Commits (3)</div>
+    <div class="file-tab">Checks</div>
+    <div style="flex:1"></div>
+    <div style="padding:0 12px;color:var(--color-text-tertiary);font-size:11px;">Split</div>
+    <div style="padding:0 12px;color:var(--color-text-secondary);font-weight:500;font-size:11px;border-bottom:2px solid #378ADD;height:100%;display:flex;align-items:center;">Unified</div>
+  </div>
+  <div class="body">
+    <div class="file-tree">
+      <div class="ft-item" style="font-family:var(--font-sans);font-size:10px;color:var(--color-text-tertiary);padding-bottom:4px;">4 files changed</div>
+      <div class="ft-item active"><div class="ft-dot" style="background:#EF9F27;"></div>src/auth/jwt.ts</div>
+      <div class="ft-item"><div class="ft-dot" style="background:#EF9F27;"></div>src/auth/refresh.ts</div>
+      <div class="ft-item"><div class="ft-dot" style="background:#378ADD;"></div>src/hooks/useAuth.ts</div>
+      <div class="ft-item"><div class="ft-dot" style="background:#E24B4A;"></div>src/middleware/guard.ts</div>
+    </div>
+    <div class="diff">
+      <div class="diff-file-header">
+        <span style="color:var(--color-text-primary);font-weight:500;">src/auth/jwt.ts</span>
+        <span style="background:#FAEEDA;color:#633806;font-size:10px;padding:1px 6px;border-radius:6px;">modified</span>
+        <span style="color:#3B6D11;margin-left:auto;">+48</span>
+        <span style="color:#791F1F;">−12</span>
+      </div>
+      <div class="hunk-header">@@ -12,8 +12,24 @@ export const createToken = (payload: TokenPayload) => {</div>
+
+      <div class="line ctx"><div class="ln">12</div><div class="line-add-btn">+</div><div class="code">  const SECRET = process.env.JWT_SECRET;</div></div>
+      <div class="line ctx"><div class="ln">13</div><div class="line-add-btn">+</div><div class="code">  if (!SECRET) throw new ConfigError('missing JWT_SECRET');</div></div>
+
+      <div class="line del"><div class="ln">14</div><div class="line-add-btn">+</div><div class="code">  return jwt.sign(payload, SECRET, { expiresIn: '24h' });</div></div>
+      <div class="line add"><div class="ln">14</div><div class="line-add-btn">+</div><div class="code">  return jwt.sign(payload, SECRET, {</div></div>
+      <div class="line add"><div class="ln">15</div><div class="line-add-btn">+</div><div class="code">    expiresIn: ACCESS_TOKEN_TTL,</div></div>
+      <div class="line add"><div class="ln">16</div><div class="line-add-btn">+</div><div class="code">    algorithm: 'RS256',</div></div>
+      <div class="line add"><div class="ln">17</div><div class="line-add-btn">+</div><div class="code">  });</div></div>
+
+      <div class="comment-thread">
+        <div class="comment">
+          <div class="av" style="background:#E1F5EE;color:#085041;">PL</div>
+          <div class="comment-body">
+            <span class="comment-author">priya.l</span><span class="comment-time">14m ago</span>
+            <div class="comment-text">Why RS256 over HS256? If we're not doing asymmetric verification across services, HS256 is simpler and faster. What's the use case here?</div>
+            <div class="comment-actions">
+              <span class="react-btn active">👍 2</span>
+              <span class="react-btn">Reply</span>
+            </div>
+          </div>
+        </div>
+        <div class="comment">
+          <div class="av" style="background:#FAEEDA;color:#633806;">AK</div>
+          <div class="comment-body">
+            <span class="comment-author">ankit.k</span><span class="comment-time">8m ago</span>
+            <div class="comment-text">We're planning to add a separate token validation microservice in Q3. RS256 lets us distribute the public key without exposing the secret. Happy to move this to an ADR if useful.</div>
+            <div class="comment-actions">
+              <span class="react-btn">👍</span>
+              <span class="react-btn">Reply</span>
+            </div>
+          </div>
+        </div>
+        <div class="comment">
+          <div class="av" style="background:#EEEDFE;color:#3C3489;">SR</div>
+          <div class="comment-body">
+            <span class="comment-author">sara.r</span><span class="comment-time">now</span>
+            <div class="comment-text">
+              <div style="display:flex;align-items:center;gap:6px;color:var(--color-text-tertiary);font-size:11px;font-style:italic;">
+                <div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>
+                typing...
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="line ctx"><div class="ln">18</div><div class="line-add-btn">+</div><div class="code">};</div></div>
+      <div class="line ctx"><div class="ln">19</div><div class="line-add-btn">+</div><div class="code"> </div></div>
+      <div class="line add"><div class="ln">20</div><div class="line-add-btn">+</div><div class="code">export const createRefreshToken = (userId: string): RefreshToken => {</div></div>
+      <div class="line add"><div class="ln">21</div><div class="line-add-btn">+</div><div class="code">  return {</div></div>
+      <div class="line add"><div class="ln">22</div><div class="line-add-btn">+</div><div class="code">    token: crypto.randomUUID(),</div></div>
+      <div class="line add"><div class="ln">23</div><div class="line-add-btn">+</div><div class="code">    userId,</div></div>
+      <div class="line add"><div class="ln">24</div><div class="line-add-btn">+</div><div class="code">    expiresAt: new Date(Date.now() + REFRESH_TOKEN_TTL),</div></div>
+      <div class="line add"><div class="ln">25</div><div class="line-add-btn">+</div><div class="code">  };</div></div>
+      <div class="line add"><div class="ln">26</div><div class="line-add-btn">+</div><div class="code">};</div></div>
+    </div>
+  </div>
+</div>
