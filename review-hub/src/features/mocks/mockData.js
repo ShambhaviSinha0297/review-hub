@@ -14,11 +14,11 @@ export const pullRequests =
     labels: [
       {
         name: "auth",
-        color: "purple",
+        color: "#e6ccff",
       },
       {
         name: "breaking",
-        color: "orange",
+        color: "#ffe0cc",
       },
     ],
 
@@ -54,11 +54,11 @@ export const pullRequests =
     labels: [
       {
         name: "perf",
-        color: "blue",
+        color: "#cce5ff",
       },
       {
         name: "ui",
-        color: "mint",
+        color: "#ccffcc",
       },
     ],
 
@@ -94,7 +94,7 @@ export const pullRequests =
     labels: [
       {
         name: "ci/cd",
-        color: "gray",
+        color: "#cccccc",
       },
     ],
 
@@ -161,11 +161,11 @@ export const pullRequests =
     labels: [
       {
         name: "frontend",
-        color: "sky",
+        color: "#cce5ff",
       },
       {
         name: "react-query",
-        color: "pink",
+        color: "#ffccff",
       },
     ],
 
@@ -201,11 +201,11 @@ export const pullRequests =
     labels: [
       {
         name: "bug",
-        color: "red",
+        color: "#ffcccc",
       },
       {
         name: "realtime",
-        color: "indigo",
+        color: "#e6ccff",
       },
     ],
 

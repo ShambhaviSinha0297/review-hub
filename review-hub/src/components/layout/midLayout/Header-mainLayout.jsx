@@ -3,8 +3,6 @@ import './midLayout.css'
 import DensityMediumIcon from '@mui/icons-material/DensityMedium';
 import AppsIcon from '@mui/icons-material/Apps';
 
-
-
 const HeaderMainLayout = () => {
   return (
     <div className='header-midlayout'>
