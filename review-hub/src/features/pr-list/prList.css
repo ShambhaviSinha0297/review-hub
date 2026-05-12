@@ -1,0 +1,23 @@
+.pr-list {
+    font-size: small;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.each-pr{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.pr-title{
+    font-weight: 600;
+}
+
+.label-section{
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: row;
+}

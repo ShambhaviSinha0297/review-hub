@@ -6,6 +6,8 @@ import Topbar from '../../components/layout/Header/Topbar'
 import Header from '../../components/layout/Header/Header'
 import Avatar from '../../components/layout/Header/Avatar'
 import LeftBar from '../../components/layout/leftBar/LeftBar'
+import HeaderMainLayout from '../../components/layout/midLayout/Header-mainLayout'
+import PRList from '../../features/pr-list/PR-List'
 
 const Dashboard = () => {
   return (
@@ -23,14 +25,20 @@ const Dashboard = () => {
         }
       />
       <div className='mid-layout'>
-        <Sidebar 
-           content={
+        <Sidebar
+          content={
             <>
-              <LeftBar/>
+              <LeftBar />
             </>
-           }
+          }
         />
-        <MidLayout />
+        <MidLayout content={
+          <>
+            <HeaderMainLayout />
+            <PRList />
+          </>
+        }
+        />
       </div>
     </div>
   )

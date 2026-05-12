@@ -1,9 +1,9 @@
 import React from 'react'
 
-const MidLayout = () => {
+const MidLayout = ({ content }) => {
   return (
     <div>
-      This is mid layout
+      {content}
     </div>
   )
 }

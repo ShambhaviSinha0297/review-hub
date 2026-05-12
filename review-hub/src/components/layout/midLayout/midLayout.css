@@ -1,0 +1,23 @@
+.search-bar{
+    width: 45rem;
+    padding: 8px;
+    border: none;
+}
+
+.header-midlayout{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+    font-size: small;
+}
+
+.open-text{
+    background-color: #ccebff;
+    width: 2.5rem;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2px;
+}
