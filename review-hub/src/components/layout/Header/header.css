@@ -1,0 +1,29 @@
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+  height: 2rem;
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+}
+
+.avatar-names:first-child{
+    margin-left: 0;
+}
+
+.avatar-names{  
+    border-radius: 20px;
+    margin-left: -6px;
+    padding: 5px 5px;
+    font-size: small;
+}
+
+.online{
+    margin-left: 10px;
+    font-size: small;
+    color: #4B5563;
+}

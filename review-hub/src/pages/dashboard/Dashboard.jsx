@@ -1,15 +1,35 @@
 import React from 'react'
-import Topbar from '../../components/layout/Topbar'
 import Sidebar from '../../components/layout/Sidebar'
 import MidLayout from '../../components/layout/MidLayout'
 import './dashboard.css'
+import Topbar from '../../components/layout/Header/Topbar'
+import Header from '../../components/layout/Header/Header'
+import Avatar from '../../components/layout/Header/Avatar'
+import LeftBar from '../../components/layout/leftBar/LeftBar'
 
 const Dashboard = () => {
   return (
     <div className='dashboard'>
-      <Topbar />
+      <Topbar
+        left={
+          <>
+            <Header title="ReviewHub" subtitle="acme/frontend" />
+          </>
+        }
+        right={
+          <>
+            <Avatar />
+          </>
+        }
+      />
       <div className='mid-layout'>
-        <Sidebar />
+        <Sidebar 
+           content={
+            <>
+              <LeftBar/>
+            </>
+           }
+        />
         <MidLayout />
       </div>
     </div>
